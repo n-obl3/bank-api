@@ -31,7 +31,9 @@ class Bank:
         returns:
             True if user is successfully logged in, False otherwise
         """
-        return ...
+        if (self.__bank_data[user_name] != None):
+            return password == self.__bank_data[user_name]["password"]
+        return False
     
     def __process_transaction(self, user_name, amount):
         """
@@ -41,7 +43,7 @@ class Bank:
             user_name: the user name of the current user
             amount: the amount to change the current users balance by
         """
-        ...
+        self.__bank_data[user_name]["balance"] = self.__bank_data[user_name]["balance"] + amount
 
     def find_user(self, user_name):
         """
@@ -72,7 +74,7 @@ class Bank:
                 "balance": 0
             }
     
-    def get_balance(self, user_name, password):
+    def get_balance(self, user_name, password) -> int:
         """
         TODO: Function that returns the balance of the current user
 
@@ -84,7 +86,9 @@ class Bank:
         returns:
             the current balance of the user
         """
-        ...
+        if (self.__user_login(user_name, password)):
+            return int(self.__bank_data[user_name]["balance"])
+
     
     def deposit(self, user_name, password, amount):
         """
@@ -94,7 +98,8 @@ class Bank:
         Make sure to use __user_login to ensure that user_name and password are a match
         Make sure to only use __process_transaction to make changes to the users balance, not directly
         """
-        ...
+        if (amount > 0 and self.__user_login(user_name, password)):
+            self.__process_transaction(user_name, amount)
 
     def withdraw(self, user_name, password, amount):
         """
@@ -104,4 +109,5 @@ class Bank:
         Make sure to use __user_login to ensure that user_name and password are a match
         Make sure to only use __process_transaction to make changes to the users balance, not directly
         """
-        ...
+        if (self.get_balance(user_name, password) >= amount and self.__user_login(user_name, password)):
+            self.__process_transaction(user_name, amount)
